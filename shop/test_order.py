@@ -7,7 +7,8 @@ class TestOrder:
 
     def setup(self):
         self.order = Order(ItemFactory())
-        self.item = self.order.create_item('coffee', 'Sirocco', 12, brands=[self.order.create_brand('leo')])
+        self.item = self.order.create_item('coffee', 'Sirocco', 12,
+                                           brands=[self.order.create_brand('Sirocco')])
         self.order.add_item(self.item)
 
     def test_len(self):
@@ -44,13 +45,16 @@ class TestOrder:
         assert items[0].name == 'Sirocco'
 
     def test_commit_rollback(self):
-        self.item = self.order.create_item('coffee', '1', 12, brands=[self.order.create_brand('leo')])
+        self.item = self.order.create_item('coffee', '1', 12,
+                                           brands=[self.order.create_brand('Sirocco')])
         self.order.add_item(self.item)
         assert len(self.order) == 2
-        self.item = self.order.create_item('coffee', '2', 12, brands=[self.order.create_brand('leo')])
+        self.item = self.order.create_item('coffee', '2', 12,
+                                           brands=[self.order.create_brand('Sirocco')])
         self.order.add_item(self.item, commit=False)
         assert len(self.order) == 2
-        self.item = self.order.create_item('coffee', '3', 12, brands=[self.order.create_brand('leo')])
+        self.item = self.order.create_item('coffee', '3', 12,
+                                           brands=[self.order.create_brand('Sirocco')])
         self.order.add_item(self.item, commit=False)
         assert len(self.order) == 2
         self.order.commit()
@@ -68,7 +72,7 @@ class TestUserOrder(TestOrder):
     def setup(self):
         self.order = UserOrder()
         self.item = self.order._order.create_item('coffee', 'Sirocco', 12,
-                                                      brands=[self.order._order.create_brand('leo')])
+                                                  brands=[self.order._order.create_brand('Sirocco')])
         self.order._order.add_item(self.item)
 
     def test_remove_item(self):
@@ -91,7 +95,8 @@ class TestStaffOrder(TestOrder):
 
     def setup(self):
         self.order = StaffOrder()
-        self.item = self.order.create_item('coffee', 'Sirocco', 12, brands=[self.order.create_brand('leo')])
+        self.item = self.order.create_item('coffee', 'Sirocco', 12,
+                                           brands=[self.order.create_brand('Sirocco')])
         self.order.add_item(self.item)
 
 
